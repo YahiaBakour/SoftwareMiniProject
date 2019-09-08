@@ -17,6 +17,7 @@ from Config import config
 
 app = Flask(__name__)
 
+
 csrf = CSRFProtect()
 
 csrf.init_app(app)
