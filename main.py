@@ -19,7 +19,10 @@ from flask_oauth import OAuth
 from urllib.request import urlopen
 from urllib import request as URLLib_request
 from urllib import error
-
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import Length, InputRequired
+from APIs import GooglePlacesApi,WeatherApi
 app = Flask(__name__)
 
 
@@ -38,6 +41,11 @@ app.config['MONGODB_SETTINGS'] = {
     'host': config.DB_URL
 }
 app.config['SECRET_KEY'] = '_no_one_cared_til_i_put_on_the_mask_'
+
+
+# Forms
+class PreferenceForm(FlaskForm):
+    area = StringField('locations',  validators=[InputRequired(), Length(max=100)])
 
 
 # Google Authentication code
@@ -69,7 +77,7 @@ def login():
 def authorized(resp):
     access_token = resp['access_token']
     session['access_token'] = access_token, ''
-    return render_template("register_preference.html")
+    return redirect(url_for("RegisterPreference"))
 
 @google.tokengetter
 def get_access_token():
@@ -97,7 +105,8 @@ def landing_page():
 
 @app.route("/RegisterPreference")
 def RegisterPreference():
-    return render_template("register_preference.html")
+    form = PreferenceForm()
+    return render_template("register_preference.html", form = form)
 
 @app.route("/Login", methods=['GET', 'POST'])
 def Login():
@@ -116,3 +125,20 @@ def logout():
     except Exception:
         pass
     return redirect("/Login")
+
+@app.route('/LoadPreference', methods = ['GET' , 'POST'])
+def LoadPreference():
+    if request.method == "POST":
+        data = request.form['area']
+        result = HandleRequestData(data)
+        return render_template("load_preferences.html", data = result)
+    else:
+        return redirect(url_for('RegisterPreference'))
+
+
+def HandleRequestData(data):
+    result = {}
+    for dat in data.split(','):
+        temp =  WeatherApi.returnWeatherData(GooglePlacesApi.get_coords(dat))
+        result[dat] = {"Temperature" : temp.temperature, "Humidity" : temp.humidity}
+    return result
