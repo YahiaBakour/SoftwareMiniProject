@@ -13,6 +13,7 @@ SET UP INFO:
 
 from flask import Flask , request,jsonify, redirect,render_template, url_for, session
 from flask_wtf.csrf import CSRFProtect
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from Config import config
 
 app = Flask(__name__)
@@ -21,6 +22,12 @@ csrf = CSRFProtect()
 
 csrf.init_app(app)
 
+login_manager = LoginManager()
+
+login_manager.init_app(app)
+
+login_manager.login_view = 'login'
+
 app.config['MONGODB_SETTINGS'] = {
     'db': config.DB_NAME,
     'host': config.DB_URL
@@ -28,4 +35,27 @@ app.config['MONGODB_SETTINGS'] = {
 
 @app.route("/")
 def landing_page():
-    return render_template('landing_page.html')
+    access_token = session.get('access_token')
+    if access_token is None:
+        return redirect(url_for('Login'))
+    access_token = access_token[0]
+    headers = {'Authorization': 'OAuth '+access_token}
+    req = URLLib_request.Request('https://www.googleapis.com/oauth2/v1/userinfo',headers= headers)
+    try:
+        opener = URLLib_request.build_opener()
+        res = opener.open(req)
+    except error.URLError as e:
+        if e.code == 401:
+            # Unauthorized - bad token
+            session.pop('access_token', None)
+            return redirect(url_for('Login'))
+        return res.read()
+    return redirect(url_for('Login'))
+
+@app.route("/Login", methods=['GET', 'POST'])
+def Login():
+    if request.method == 'GET':
+        if current_user.is_authenticated == True:
+            return redirect(url_for('RegisterPreferences'))
+        else:
+            return render_template('Login.html')
