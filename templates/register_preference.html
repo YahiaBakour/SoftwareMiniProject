@@ -10,7 +10,19 @@
 
 
 {% block body %}
-    <div class="main"  style="text-align:center;">
-            <h1 style="color:white">Functionality here</h1>
-    </div>
+<div style="text-align: center;">
+  <form  action = "http://127.0.0.1:5000/LoadPreference" method = "POST">
+    {% if name %}
+    <h2 style="color:white;">So, {{ name }} where ya goin? <br/> <br />
+      {% else %}
+    <h2 style="color:white;"> Choose which cities you want your sensors in <br/> <br />
+      {% endif %}
+
+        {{ form.area(class_="", placeholder="Location")}}
+        </h2>
+        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
+        <p><input type = "submit" value = "submit" class="FORMSUBMIT"/></p>
+  </form>
+</div>
 {% endblock %}
