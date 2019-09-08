@@ -23,6 +23,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import Length, InputRequired
 from APIs import GooglePlacesApi,WeatherApi
+import json
 app = Flask(__name__)
 
 
@@ -94,7 +95,8 @@ def landing_page():
     try:
         opener = URLLib_request.build_opener()
         res = opener.open(req)
-        print(res)
+        result =  json.loads(res.read().decode('utf-8'))["email"]
+        session["email"] = result
     except error.URLError as e:
         if e.code == 401:
             # Unauthorized - bad token
@@ -105,8 +107,17 @@ def landing_page():
 
 @app.route("/RegisterPreference")
 def RegisterPreference():
+    Name = None
+    access_token = session.get('access_token')
+    if access_token is None:
+        return redirect(url_for('Login'))
+    try:
+        Name = session.get("email").split("@")[0]
+    except Exception as e:
+        Name = None
     form = PreferenceForm()
-    return render_template("register_preference.html", form = form)
+    print(Name)
+    return render_template("register_preference.html", form = form, loggedin = True, name = Name)
 
 @app.route("/Login", methods=['GET', 'POST'])
 def Login():
@@ -117,21 +128,26 @@ def Login():
             return render_template('Login.html')
 
 @app.route('/logout', methods = ['GET'])
-@login_required
 def logout():
+    del session['access_token']
     logout_user()
-    try:
-        del session['access_token']
-    except Exception:
-        pass
-    return redirect("/Login")
+    return redirect(url_for("Login"))
 
 @app.route('/LoadPreference', methods = ['GET' , 'POST'])
 def LoadPreference():
+    Name = None
+    access_token = session.get('access_token')
+    if access_token is None:
+        return redirect(url_for('Login'))
+
     if request.method == "POST":
         data = request.form['area']
+        try:
+            Name = session.get("email").split("@")[0]
+        except Exception as e:
+            Name = None
         result = HandleRequestData(data)
-        return render_template("load_preferences.html", data = result)
+        return render_template("load_preferences.html", data = result,loggedin=True,name = Name)
     else:
         return redirect(url_for('RegisterPreference'))
 
