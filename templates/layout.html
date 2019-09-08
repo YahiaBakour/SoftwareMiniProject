@@ -13,17 +13,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     {% block stylesheet %}{% endblock %}
 
-    <div id = "container">
     
-    <title>
-        {% block title %}{% endblock %}
-    </title>
+      {% block title %}{% endblock %}
     <head>
         {% block head %}{% endblock %}
     </head>
 
    <nav class="navbar navbar-expand-lg navbar-dark w3-dark-grey">
-      <a class="navbar-brand" href="/requestarea">Home</a>
+      <a class="navbar-brand" href="/">Home</a>
      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
        <span class="navbar-toggler-icon"></span>
      </button>
@@ -44,11 +41,13 @@
 
      </div>
    </nav>
+<div id = "container">
+   <body>
+      {% block body %}{% endblock %}
+  </body>
 </div>
 
-<body>
-    {% block body %}{% endblock %}
-</body>
+
 
 <!-- Footer -->
 {% block footer %}
