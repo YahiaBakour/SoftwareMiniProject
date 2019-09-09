@@ -7,9 +7,21 @@
   {% endblock %}
 {% endblock %}
 
+{% block style %}
+<style>
+  .ButtonCenteringDiv{
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+</style>
+{% endblock %}
+
 
 {% block body %}
-    <div class="main"  style="text-align:center;">
+    <div class="main ButtonCenteringDiv"  style="text-align:center;">
         <a href="./Googlelogin" class="FORMSUBMIT" align="center">Login with <i class="fa fa-google w3-hover-opacity"></i></a>
     </div>
 {% endblock %}
