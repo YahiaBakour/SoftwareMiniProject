@@ -13,7 +13,7 @@ SET UP INFO:
 
 from flask import Flask , request,jsonify, redirect,render_template, url_for, session
 from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin, LoginManager
 from Config import config
 from flask_oauth import OAuth
 from urllib.request import urlopen
@@ -24,6 +24,9 @@ from wtforms import StringField
 from wtforms.validators import Length, InputRequired
 from APIs import GooglePlacesApi,WeatherApi
 import json
+import pymongo
+from flask_mongoengine import MongoEngine, Document
+
 app = Flask(__name__)
 
 csrf = CSRFProtect()
@@ -41,8 +44,16 @@ app.config['MONGODB_SETTINGS'] = {
     'host': config.DB_URL
 }
 app.config['SECRET_KEY'] = '_no_one_cared_til_i_put_on_the_mask_'
+db = MongoEngine(app)
 
+class User(UserMixin, db.Document):
+    meta = {'collection': 'accounts'}
+    email = db.StringField(max_length=30)
+    location_preferences = db.ListField()
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.objects(pk=user_id).first()
 # Forms
 class PreferenceForm(FlaskForm):
     area = StringField('locations',  validators=[InputRequired(), Length(max=100)])
@@ -115,7 +126,6 @@ def RegisterPreference():
     except Exception as e:
         Name = None
     form = PreferenceForm()
-    print(Name)
     return render_template("register_preference.html", form = form, loggedin = True, name = Name)
 
 @app.route("/Login", methods=['GET', 'POST'])
@@ -138,22 +148,38 @@ def LoadPreference():
     access_token = session.get('access_token')
     if access_token is None:
         return redirect(url_for('Login'))
-
     if request.method == "POST":
+        existing_user = User.objects(email=session.get("email")).first()
         data = request.form['area']
+        result = HandleRequestData(data)
+        if existing_user is None:
+            newUser = User(email=session.get("email"), location_preferences = result.keys() ).save()
         try:
             Name = session.get("email").split("@")[0]
         except Exception as e:
             Name = None
-        result = HandleRequestData(data)
         return render_template("load_preferences.html", data = result,loggedin=True,name = Name)
     else:
-        return redirect(url_for('RegisterPreference'))
+        existing_user = User.objects(email=session.get("email")).first()
+        if existing_user is None:    
+            return redirect(url_for('RegisterPreference'))
+        else:
+            data = existing_user.location_preferences
+            result = HandleRequestData(data)
+            Name = None
+            return render_template("load_preferences.html", data = result,loggedin=True,name = Name)
+
 
 
 def HandleRequestData(data):
     result = {}
-    for dat in data.split(','):
-        temp =  WeatherApi.returnWeatherData(GooglePlacesApi.get_coords(dat))
-        result[dat] = {"Temperature" : temp.temperature, "Humidity" : temp.humidity}
+    if isinstance(data,str):
+        for dat in data.split(','):
+            temp =  WeatherApi.returnWeatherData(GooglePlacesApi.get_coords(dat))
+            result[dat] = {"Temperature" : temp.temperature, "Humidity" : temp.humidity}
+        return result
+    elif isinstance(data,list):
+        for dat in data:
+            temp =  WeatherApi.returnWeatherData(GooglePlacesApi.get_coords(dat))
+            result[dat] = {"Temperature" : temp.temperature, "Humidity" : temp.humidity}
     return result
