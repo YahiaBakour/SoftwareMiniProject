@@ -165,7 +165,7 @@ def LoadPreference():
             Name = session.get("email").split("@")[0]
         except Exception as e:
             Name = None
-        return render_template("load_preferences.html", data = result,loggedin=True,name = Name)
+        return render_template("load_preferences.html", data = result,loggedin=True,name = Name, onLoadPreferencesPage = True)
     else:
         existing_user = User.objects(email=session.get("email")).first()
         if existing_user is None:    
@@ -174,7 +174,7 @@ def LoadPreference():
             data = existing_user.location_preferences
             result = HandleRequestData(data)
             Name = None
-            return render_template("load_preferences.html", data = result,loggedin=True,name = Name)
+            return render_template("load_preferences.html", data = result,loggedin=True,name = Name , onLoadPreferencesPage = True)
 
 
 
