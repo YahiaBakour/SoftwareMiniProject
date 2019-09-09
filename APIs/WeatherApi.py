@@ -1,5 +1,4 @@
-# REFERENCE: https://github.com/bitpixdigital/forecastiopy3
-#pip install forecastiopy 
+#pip install darksky_weather 
 
 from darksky.api import DarkSky, DarkSkyAsync
 from darksky.types import languages, units, weather

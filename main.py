@@ -47,7 +47,7 @@ app.config['SECRET_KEY'] = '_no_one_cared_til_i_put_on_the_mask_'
 db = MongoEngine(app)
 
 class User(UserMixin, db.Document):
-    meta = {'collection': 'accounts'}
+    meta = {'collection': 'Accounts'}
     email = db.StringField(max_length=30)
     location_preferences = db.ListField()
 
@@ -88,7 +88,7 @@ def login():
 def authorized(resp):
     access_token = resp['access_token']
     session['access_token'] = access_token, ''
-    return redirect(url_for("RegisterPreference"))
+    return redirect(url_for("landing_page"))
 
 @google.tokengetter
 def get_access_token():
@@ -97,6 +97,7 @@ def get_access_token():
 @app.route("/")
 def landing_page():
     access_token = session.get('access_token')
+    ## Check if user is logged in or not
     if access_token is None:
         return redirect(url_for('Login'))
     access_token = access_token[0]
@@ -113,6 +114,12 @@ def landing_page():
             session.pop('access_token', None)
             return redirect(url_for('Login'))
         return res.read()
+    ## Check if user is first time login or not 
+    existing_user = User.objects(email=session.get("email")).first()
+    if existing_user is None:
+        return redirect(url_for('RegisterPreference'))
+    else:
+        return redirect(url_for('LoadPreference'))
     return redirect(url_for('RegisterPreference'))
 
 @app.route("/RegisterPreference")
