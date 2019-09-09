@@ -160,7 +160,9 @@ def LoadPreference():
         data = request.form['area']
         result = HandleRequestData(data)
         if existing_user is None:
-            newUser = User(email=session.get("email"), location_preferences = result.keys() ).save()
+            newUser = User(email=session.get("email"), location_preferences = result.keys()).save()
+        else:
+            existing_user.update(location_preferences=result.keys())
         try:
             Name = session.get("email").split("@")[0]
         except Exception as e:
