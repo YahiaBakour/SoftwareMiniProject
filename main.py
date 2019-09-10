@@ -143,7 +143,7 @@ def Login():
         if current_user.is_authenticated == True:
             return redirect(url_for('RegisterPreference'))
         else:
-            return render_template('Login.html')
+            return render_template('login.html', Homepage = "active")
 
 @app.route('/logout', methods = ['GET'])
 def logout():
