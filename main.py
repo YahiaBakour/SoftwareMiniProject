@@ -10,6 +10,7 @@ SET UP INFO:
 8. Do ‘CTRL+C’ in your terminal to kill the instance.
 9. To auto update the instance once you save ,export FLASK_DEBUG=1 or windows:  $env:FLASK_DEBUG = "main.py"
 '''
+# [START gae_python37_app]
 
 from flask import Flask , request,jsonify, redirect,render_template, url_for, session
 from flask_wtf.csrf import CSRFProtect
@@ -192,3 +193,12 @@ def HandleRequestData(data):
             temp =  WeatherApi.returnWeatherData(GooglePlacesApi.get_coords(dat))
             result[dat] = {"Temperature" : temp.temperature, "Humidity" : temp.humidity}
     return result
+
+
+
+if __name__ == '__main__':
+    # This is used when running locally only. When deploying to Google App
+    # Engine, a webserver process such as Gunicorn will serve the app. This
+    # can be configured by adding an `entrypoint` to app.yaml.
+    app.run(host='127.0.0.1', port=8080, debug=True)
+# [END gae_python37_app]
