@@ -11,7 +11,7 @@
 
 {% block body %}
 <div style="text-align: center;">
-  <form  action = "http://127.0.0.1:5000/LoadPreference" method = "POST">
+  <form  action = "/LoadPreference" method = "POST">
     {% if name %}
     <h2 style="color:white;">Hello {{ name }}, Enter a comma seperated list of cities you want to keep track of  <br/> <br />
       {% else %}
