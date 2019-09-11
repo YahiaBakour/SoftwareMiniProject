@@ -13,9 +13,9 @@
 <div style="text-align: center;">
   <form  action = "/LoadPreference" method = "POST">
     {% if name %}
-    <h2 style="color:white;">Hello {{ name }}, Enter a comma seperated list of cities you want to keep track of  <br/> <br />
+    <h2 >Hello {{ name }}, Enter a comma seperated list of cities you want to keep track of  <br/> <br />
       {% else %}
-    <h2 style="color:white;"> Enter a comma-seperated list of which cities you want your sensors in <br/> <br />
+    <h2 > Enter a comma-seperated list of which cities you want your sensors in <br/> <br />
       {% endif %}
 
         {{ form.area(class_="", placeholder="Location")}}
