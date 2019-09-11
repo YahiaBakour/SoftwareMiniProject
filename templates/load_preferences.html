@@ -1,12 +1,56 @@
 {% extends "layout.html" %}
 
-{% block body %}
-
-
-{% for dictionary in data %}
-<h1>Weather for {{ dictionary }}</h1>
-<h2>Temperature: {{ data[dictionary]["Temperature"] }} F </h2>
-<h2>Humidity: {{ data[dictionary]["Humidity"]*100 }}% </h2>
-<br>
-{% endfor %}
+{% block style %}
+<style>
+        .scrolling-wrapper {
+          overflow-x: scroll;
+          overflow-y: hidden;
+          white-space: nowrap;
+        }
+        .card {
+            display: inline-block;
+            color:white;
+            background-color: #616161;
+            padding:1em;
+          }
+          #style-1::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #F5F5F5;
+        }
+        #style-1::-webkit-scrollbar
+        {
+            width: 12px;
+            background-color: #F5F5F5;
+        }
+        #style-1::-webkit-scrollbar-thumb
+        {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #555;
+        }
+        .striped-border {
+                border: 1px dashed #000;
+                width: 50%;
+                margin: auto;
+                margin-top: 5%;
+                margin-bottom: 5%;
+            }
+        </style>
 {% endblock %}
+
+{% block body %}
+<body>
+<div class="scrolling-wrapper" id="style-1">
+    {% for dictionary in data %}
+        <div class="card">
+            <h1> {{ dictionary }}</h1>
+            <h2>Temperature: {{ data[dictionary]["Temperature"] }} F </h2>
+            <h2>Humidity: {{ data[dictionary]["Humidity"]*100 }}% </h2>
+            <br>
+        </div>
+    {% endfor %}
+    </div>
+</body>
+ {% endblock %}
