@@ -2,6 +2,11 @@
 
 {% block body %}
 
-<h1>{{ data }}</h1>
 
+{% for dictionary in data %}
+<h1>Weather for {{ dictionary }}</h1>
+<h2>Temperature: {{ data[dictionary]["Temperature"] }} F </h2>
+<h2>Humidity: {{ data[dictionary]["Humidity"]*100 }}% </h2>
+<br>
+{% endfor %}
 {% endblock %}

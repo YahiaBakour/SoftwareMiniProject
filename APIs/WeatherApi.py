@@ -1,4 +1,4 @@
-#pip install darksky_weather 
+#pip install darksky_weather
 
 from darksky.api import DarkSky, DarkSkyAsync
 from darksky.types import languages, units, weather
@@ -7,7 +7,6 @@ sys.path.append("../")
 from Config import config
 
 apikey = config.Forecastio_API
-
 darksky = DarkSky(apikey)
 
 def returnWeatherData(AREA):
@@ -16,6 +15,6 @@ def returnWeatherData(AREA):
         extend=False, # default `False`
         lang=languages.ENGLISH, # default `ENGLISH`
         units=units.AUTO, # default `auto`
-        exclude=[weather.MINUTELY, weather.ALERTS] # default `[]`
+        exclude=[weather.MINUTELY, weather.ALERTS], # default `[]`
     )
     return (forecast.currently)

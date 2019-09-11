@@ -116,7 +116,7 @@ def landing_page():
             session.pop('access_token', None)
             return redirect(url_for('Login'))
         return res.read()
-    ## Check if user is first time login or not 
+    ## Check if user is first time login or not
     existing_user = User.objects(email=session.get("email")).first()
     if existing_user is None:
         return redirect(url_for('RegisterPreference'))
@@ -172,7 +172,7 @@ def LoadPreference():
         return render_template("load_preferences.html", data = result,loggedin=True,name = Name, onLoadPreferencesPage = True)
     else:
         existing_user = User.objects(email=session.get("email")).first()
-        if existing_user is None:    
+        if existing_user is None:
             return redirect(url_for('RegisterPreference'))
         else:
             data = existing_user.location_preferences
