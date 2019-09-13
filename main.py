@@ -27,9 +27,11 @@ from APIs import GooglePlacesApi,WeatherApi
 import json
 import pymongo
 from flask_mongoengine import MongoEngine, Document
+from flask_googlecharts import GoogleCharts, LineChart
 
 app = Flask(__name__)
 
+charts = GoogleCharts(app)
 
 csrf = CSRFProtect()
 
@@ -47,6 +49,7 @@ app.config['MONGODB_SETTINGS'] = {
 }
 app.config['SECRET_KEY'] = '_no_one_cared_til_i_put_on_the_mask_'
 db = MongoEngine(app)
+
 
 class User(UserMixin, db.Document):
     meta = {'collection': 'Accounts'}
@@ -151,36 +154,67 @@ def logout():
     logout_user()
     return redirect(url_for("Login"))
 
+
+
 @app.route('/LoadPreference', methods = ['GET' , 'POST'])
 def LoadPreference():
-    Name = None
-    access_token = session.get('access_token')
-    if access_token is None:
-        return redirect(url_for('Login'))
-    if request.method == "POST":
-        existing_user = User.objects(email=session.get("email")).first()
-        data = request.form['area']
-        result = HandleRequestData(data)
-        if existing_user is None:
-            newUser = User(email=session.get("email"), location_preferences = result.keys()).save()
-        else:
-            existing_user.update(location_preferences=result.keys())
-        try:
-            Name = session.get("email").split("@")[0]
-        except Exception as e:
-            Name = None
-        return render_template("load_preferences.html", data = result,loggedin=True,name = Name, onLoadPreferencesPage = True)
-    else:
-        existing_user = User.objects(email=session.get("email")).first()
-        if existing_user is None:
-            return redirect(url_for('RegisterPreference'))
-        else:
-            data = existing_user.location_preferences
+    try:
+        Name = None
+        access_token = session.get('access_token')
+        if access_token is None:
+            return redirect(url_for('Login'))
+        if request.method == "POST":
+            existing_user = User.objects(email=session.get("email")).first()
+            data = request.form['area']
             result = HandleRequestData(data)
-            Name = None
-            return render_template("load_preferences.html", data = result,loggedin=True,name = Name , onLoadPreferencesPage = True)
+            if existing_user is None:
+                newUser = User(email=session.get("email"), location_preferences = result.keys()).save()
+            else:
+                existing_user.update(location_preferences=result.keys())
+            try:
+                Name = session.get("email").split("@")[0]
+            except Exception as e:
+                Name = None
+            chartdata = MultipleTemp(data)
+            chartnames = []
+            for dat in chartdata:
+                CHART = LineChart(dat.strip().replace(" ", "_"), options={'title': 'Humidity vs Day'})
+                CHART.add_column("number", "Day")
+                CHART.add_column("number", "Humidity")
+                CHART.add_rows(chartdata[dat])
+                chartnames.append(dat.strip().replace(" ", "_"))
+                charts.register(CHART)
+            return render_template("load_preferences.html", data = result,loggedin=True,name = Name, onLoadPreferencesPage = True,chartnames =  chartnames)
+        else:
+            existing_user = User.objects(email=session.get("email")).first()
+            if existing_user is None:
+                return redirect(url_for('RegisterPreference'))
+            else:
+                data = existing_user.location_preferences
+                result = HandleRequestData(data)
+                Name = None
+                chartdata = MultipleTemp(data)
+                chartnames = []
+                for dat in chartdata:
+                    CHART = LineChart(dat.strip().replace(" ", "_"), options={'title': 'Humidity vs Day'})
+                    CHART.add_column("number", "Day")
+                    CHART.add_column("number", "Humidity")
+                    CHART.add_rows(chartdata[dat])
+                    chartnames.append(dat.strip().replace(" ", "_"))
+                    charts.register(CHART)
+                return render_template("load_preferences.html", data = result,loggedin=True,name = Name , onLoadPreferencesPage = True,chartnames =  chartnames )
+    except Exception as e:
+        return redirect(url_for("exception_error"))
 
 
+@app.errorhandler(404)
+def page_error(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+@app.route('/error', methods = ['GET'])
+def exception_error():
+    return render_template('500.html'), 500
 
 def HandleRequestData(data):
     result = {}
@@ -195,7 +229,27 @@ def HandleRequestData(data):
             result[dat] = {"Temperature" : temp.temperature, "Humidity" : temp.humidity}
     return result
 
-
+def MultipleTemp(data):
+    result = {}
+    count = 0
+    if isinstance(data,str):
+        for dat in data.split(','):
+            res = []
+            temp =  WeatherApi.returnWeatherDataforpast(GooglePlacesApi.get_coords(dat))
+            for DATA in temp.data:
+                res.append([count,DATA.humidity])
+                count+=1
+            result[dat] = res
+        return result
+    elif isinstance(data,list):
+        for dat in data:
+            res = []
+            temp =  WeatherApi.returnWeatherDataforpast(GooglePlacesApi.get_coords(dat))
+            for DATA in temp.data:
+                res.append([count,DATA.humidity])
+                count+=1
+            result[dat] = res
+        return result
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
