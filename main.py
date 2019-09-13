@@ -234,6 +234,7 @@ def MultipleTemp(data):
     count = 0
     if isinstance(data,str):
         for dat in data.split(','):
+            count = 0
             res = []
             temp =  WeatherApi.returnWeatherDataforpast(GooglePlacesApi.get_coords(dat))
             for DATA in temp.data:
@@ -243,6 +244,7 @@ def MultipleTemp(data):
         return result
     elif isinstance(data,list):
         for dat in data:
+            count = 0
             res = []
             temp =  WeatherApi.returnWeatherDataforpast(GooglePlacesApi.get_coords(dat))
             for DATA in temp.data:

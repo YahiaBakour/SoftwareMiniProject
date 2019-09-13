@@ -12,6 +12,7 @@ flask-mongoengine==0.9.5
 Flask-WTF==0.14.2
 googlemaps==3.1.1
 httplib2==0.13.1
+Flask-GoogleCharts==0.1.0
 idna==2.8
 idna-ssl==1.1.0
 itsdangerous==1.1.0
