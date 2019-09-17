@@ -24,6 +24,8 @@ To run the application locally, clone this repository and do the following:
 
 ## Project Design
 
+![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/diagram.JPG)
+
 ### Web Framework
 
 Our web app is an instance of Flask, a framework that allows us to easily define webpages within the app that are associated with Python functions we wrote to provide the desired functionality of each page.  We designated functions associated with a landing page, a page to register user locations, a page to display data on those locations, as well as login, logout, and redirect functions.  We fromatted our webpages using HTML and CSS, and used some basic open-source webpage templates to build off of.
