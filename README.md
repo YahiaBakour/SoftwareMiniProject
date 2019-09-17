@@ -69,3 +69,14 @@ As a user, I want a clean UI.
 As a user, I want to see a 404 page on incorrect URL entry.
 
 As a user, I want to see some charted data.
+
+### References
+
+* https://github.com/YahiaBakour/CS411
+* https://codemyui.com/?s=gradient
+* https://cloud.google.com/docs/
+* https://realpython.com/flask-google-login/
+* https://darksky.net/dev
+* https://developers.google.com/maps/documentation/geolocation/intro
+
+

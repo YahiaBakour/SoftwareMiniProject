@@ -207,6 +207,10 @@ def LoadPreference():
         return redirect(url_for("exception_error"))
 
 
+@app.route("/aboutus")
+def about_us():
+    return render_template('aboutus.html',loggedin=(session.get('access_token') is not None))
+
 @app.errorhandler(404)
 def page_error(e):
     return render_template('404.html'), 404
