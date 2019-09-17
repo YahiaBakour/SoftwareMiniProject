@@ -52,7 +52,7 @@ To streamline our collaboration on the app, we used agile development principles
 ![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/calendar.JPG)
 ![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/trello.JPG)
 
-### User Stories
+### User Stories / Acceptance Criteria
 
 As a user, I'd like to be able to display weather data from multiple locations.
 
@@ -63,3 +63,9 @@ As a user, I don't want to have to create a new account to log in.
 As a user, I'd like to see a graph of weather data from previous days in my favorite locations.
 
 As a user, I want to be able to access my data anytime on any computer.
+
+As a user, I want a clean UI.
+
+As a user, I want to see a 404 page on incorrect URL entry.
+
+As a user, I want to see some charted data.
