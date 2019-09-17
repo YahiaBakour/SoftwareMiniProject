@@ -18,9 +18,10 @@ To run the application locally, clone this repository and do the following:
 2. CD into the directory
 3. Do pip3 installs for all imports
 4. Run 'export FLASK_APP=main.py' or For windows: $env:FLASK_APP = "main.py" , or set FLASK_APP=main.py
-5. Run 'python3 -m flask run'
-6. Go to http://127.0.0.1:5000/ (or http://localhost:5000/) in your browser
-7. Do ‘CTRL+C’ in your terminal to kill the instance.
+5. Create a Config directory within the main directory and add secret keys.  We can email you those.
+6. Run 'python3 -m flask run'
+7. Go to http://127.0.0.1:5000/ (or http://localhost:5000/) in your browser
+8. Do ‘CTRL+C’ in your terminal to kill the instance.
 
 ## Project Design
 
