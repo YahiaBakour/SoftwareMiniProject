@@ -25,7 +25,7 @@ To run the application locally, clone this repository and do the following:
 
 ## Project Design
 
-![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/diagram.JPG)
+![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/static/images/diagram.JPG)
 
 ### Web Framework
 
@@ -49,8 +49,8 @@ We used Google App Engine on Google Cloud to host our application.  Google App E
 
 To streamline our collaboration on the app, we used agile development principles.  We used Trello, which allowed us to create cards with tasks allocated to each of us with target completion dates.  We used two one-week sprints to further organize these tasks and keep us on track.
 
-![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/calendar.JPG)
-![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/trello.JPG)
+![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/static/images/calendar.JPG)
+![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/static/images/trello.JPG)
 
 ### User Stories / Acceptance Criteria
 
