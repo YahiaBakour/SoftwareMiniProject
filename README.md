@@ -51,3 +51,12 @@ To streamline our collaboration on the app, we used agile development principles
 
 ### User Stories
 
+As a user, I'd like to be able to display weather data from multiple locations.
+
+As a user, I'd like to be able to log in and save my favorite locations so I don't have to enter them in the future.
+
+As a user, I don't want to have to create a new account to log in.
+
+As a user, I'd like to see a graph of weather data from previous days in my favorite locations.
+
+As a user, I want to be able to access my data anytime on any computer.
