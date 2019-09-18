@@ -213,12 +213,12 @@ def about_us():
 
 @app.errorhandler(404)
 def page_error(e):
-    return render_template('404.html'), 404
+    return render_template('404.html', loggedin=(session.get('access_token') is not None),onLoadPreferencesPage = True), 404
 
 @app.errorhandler(500)
 @app.route('/error', methods = ['GET'])
 def exception_error():
-    return render_template('500.html'), 500
+    return render_template('500.html', loggedin=(session.get('access_token') is not None), onLoadPreferencesPage = True), 500
 
 def HandleRequestData(data):
     result = {}
