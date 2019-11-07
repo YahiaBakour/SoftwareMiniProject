@@ -1,5 +1,7 @@
 # SoftwareMiniProject
 
+https://senior-design-252116.appspot.com/
+
 ## Yahia Bakour and Gordon Wallace
 
 ### 9/20/2019
@@ -25,7 +27,7 @@ To run the application locally, clone this repository and do the following:
 
 ## Project Design
 
-![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/static/images/diagram.JPG)
+![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/diagram.JPG)
 
 ### Web Framework
 
@@ -49,8 +51,8 @@ We used Google App Engine on Google Cloud to host our application.  Google App E
 
 To streamline our collaboration on the app, we used agile development principles.  We used Trello, which allowed us to create cards with tasks allocated to each of us with target completion dates.  We used two one-week sprints to further organize these tasks and keep us on track.
 
-![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/static/images/calendar.JPG)
-![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/static/images/trello.JPG)
+![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/calendar.JPG)
+![](https://github.com/YahiaBakour/SoftwareMiniProject/blob/master/images/trello.JPG)
 
 ### User Stories / Acceptance Criteria
 
@@ -69,6 +71,29 @@ As a user, I want a clean UI.
 As a user, I want to see a 404 page on incorrect URL entry.
 
 As a user, I want to see some charted data.
+
+### Unit Testing / Manual
+
+In order to make sure our program is free of bugs, we extensively tested additional user stories that involved edge cases and unexpected behaviors.  Some examples include:
+
+* If a user resizes the webpage or views it in a small window, it still renders correctly.
+* If a user enters a long list of locations, the window can accomodate all of the information (accomplished with a horizontal scrolling feature).
+* If a user enters a nonsensical location, the app still returns a result (accomplished with the Google Maps API).
+* If a user incorrectly formats their entry, the app returns a custom error message saying so and prompting them to re-enter.
+* If a user enters an invalid URL at our domain, it will display a custom error message.
+
+### Unit Testing / Code
+
+We also implemented some simple unit tests using python's built in library (unittest), we wrote code to unit test for the following:
+
+* Geolocation API functionality
+* Weather API functionality
+* Login Page routing
+* Load Page routing
+* Register Page routing 
+* Landing page routing 
+
+In the future if we had more time, we would add more advanced testing to the web app.
 
 ### References
 
